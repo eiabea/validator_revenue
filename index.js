@@ -13,7 +13,7 @@ async function start() {
   // Fetch the latest state object from beaconcha.in 
   const latestState = await axios.get('https://beaconcha.in/latestState')
   // Fetch the performance object for the validator from beaconcha.in 
-  const performance = await axios.get(`https://beaconcha.in/api/v1/validator/${validator}/performance`)
+  const performance = await axios.get(`https://beaconcha.in/api/v1/validator/${VALIDATOR}/performance`)
 
   // Get relevant data from the responses
   const { ethPrice } = latestState.data
