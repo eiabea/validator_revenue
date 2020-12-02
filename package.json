@@ -1,0 +1,24 @@
+{
+  "name": "validator_revenue",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "keywords": [
+    "eth2",
+    "validator",
+    "beaconcha.in"
+  ],
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": {
+    "name": "eiabea",
+    "email": "developer@eiabea.com",
+    "url": "https://github.com/eiabea/"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.21.0"
+  }
+}
