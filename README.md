@@ -8,11 +8,31 @@ API provided by [beaconcha.in](https://beaconcha.in/)
 
 # Usage
 
+## Docker
+
+### Pre-requirements:
+
+- [Docker](https://www.docker.com/)
+
 ```
 $ docker run -e VALIDATOR=<YOUR VALIDATORS PUBLIC KEY> eiabea/validator_revenue
 ```
 
-Sample output:
+## Node
+
+### Pre-requirements
+
+- [Node.js](https://nodejs.org/en/)
+- [git](https://git-scm.com/)
+
+```
+$ git clone https://github.com/eiabea/validator_revenue.git
+$ cd validator_revenue
+$ npm install
+$ VALIDATOR=<YOUR VALIDATORS PUBLIC KEY> npm start
+```
+
+# Sample output:
 ```
 {
   rev1d: 8.809719764,
