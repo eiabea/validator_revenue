@@ -24,7 +24,7 @@ async function start() {
     rev1d: ethPrice * prefData.performance1d / 1E9,
     rev7d: ethPrice * prefData.performance7d / 1E9,
     rev31d: ethPrice * prefData.performance31d / 1E9,
-    rev356d: ethPrice * prefData.performance365d / 1E9,
+    rev365d: ethPrice * prefData.performance365d / 1E9,
   }
 
   // Present it to the user
