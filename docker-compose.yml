@@ -7,3 +7,5 @@ services:
 
   influx:
     image: influxdb:alpine
+    volumes:
+      - ./influx_data:/var/lib/influxdb
