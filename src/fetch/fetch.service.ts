@@ -25,7 +25,6 @@ export class FetchService {
     } catch (error) {
       this.logger.error(`Unable to get latest price [${error.response.status}]`);
     }
-
   }
 
   async getPerformance(): Promise<PerformanceData> {

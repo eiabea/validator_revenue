@@ -1,0 +1,9 @@
+version: "3"
+
+services:
+  validator-revenue:
+    image: eiabea/validator_revenue
+    env_file: .env
+
+  influx:
+    image: influxdb:alpine
