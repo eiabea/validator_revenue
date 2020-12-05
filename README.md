@@ -2,7 +2,7 @@
 
 # Validator revenue
 
-Simple [alpine](https://alpinelinux.org/) container to get latest revenue of an eth2 validator in dollar written in [Node.js](https://nodejs.org/en/)
+Simple [alpine](https://alpinelinux.org/) container to get latest price and performance of an eth2 validator written with [nest.js](https://nestjs.com/). Fetched data gets stored into an [InfluxDB](https://www.influxdata.com/products/influxdb/) which can act as a data source for [Grafana](https://grafana.com/)
 
 API provided by [beaconcha.in](https://beaconcha.in/)
 
@@ -13,31 +13,10 @@ API provided by [beaconcha.in](https://beaconcha.in/)
 ### Pre-requirements:
 
 - [Docker](https://www.docker.com/)
+- [docker-compose](https://docs.docker.com/compose/)
+
+Rename `.env.example` to `.env` and adopt values
 
 ```
-$ docker run -e VALIDATOR=<YOUR VALIDATORS PUBLIC KEY> eiabea/validator_revenue
-```
-
-## Node
-
-### Pre-requirements
-
-- [Node.js](https://nodejs.org/en/)
-- [git](https://git-scm.com/)
-
-```
-$ git clone https://github.com/eiabea/validator_revenue.git
-$ cd validator_revenue
-$ npm install
-$ VALIDATOR=<YOUR VALIDATORS PUBLIC KEY> npm start
-```
-
-# Sample output:
-```
-{
-  rev1d: 8.809719764,
-  rev7d: 8.809719764,
-  rev31d: 8.809719764,
-  rev356d: 8.809719764
-}
+$ docker-compose up
 ```
