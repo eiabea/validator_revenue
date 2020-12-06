@@ -1,0 +1,11 @@
+version: "3"
+
+services:
+  validator-revenue:
+    image: eiabea/validator_revenue
+    env_file: .env
+
+  influx:
+    image: influxdb:alpine
+    volumes:
+      - ./influx_data:/var/lib/influxdb
