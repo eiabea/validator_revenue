@@ -20,3 +20,10 @@ Rename `.env.example` to `.env` and adopt values
 ```
 $ docker-compose up
 ```
+
+# Grafana
+
+1. Login to your grafana instance
+2. Go to `Create` -> `Import`
+3. Upload file [dashboard.json](grafana/dashboard.json)
+4. Select the influxdb as datasource
