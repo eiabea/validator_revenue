@@ -6,6 +6,7 @@ import { SchedulerRegistry } from '@nestjs/schedule';
 import { InfluxService } from './influx/influx';
 import { ConfigService } from '@nestjs/config';
 import { CronJob } from 'cron';
+import { Perf } from './interfaces/validators';
 
 @Controller()
 export class AppController implements OnModuleInit {
@@ -27,8 +28,8 @@ export class AppController implements OnModuleInit {
     const fetchJob: CronJob = new CronJob(this.CRON_PATTERN, async () => {
       this.logger.debug('Triggered fetch job');
       const price = await this.fetchService.getLatestPrice();
-      const perf = await this.fetchService.getPerformance();
-      this.influxService.write(price, perf);
+      const performances: Array<Perf> = await this.fetchService.getPerformance();
+      this.influxService.write(price, performances);
     });
     this.schedulerRegistry.addCronJob('fetch-job', fetchJob);
     fetchJob.start();
