@@ -4,6 +4,8 @@ services:
   validator-revenue:
     image: eiabea/validator_revenue
     env_file: .env
+    volumes:
+      - ./validators.json:/config/validators.json
 
   influx:
     image: influxdb:alpine
