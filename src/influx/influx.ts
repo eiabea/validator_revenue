@@ -1,7 +1,7 @@
 import { Injectable, OnModuleInit, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InfluxDB, FieldType, IPoint } from 'influx';
-import { PerformanceData } from 'src/dto/performance.dto';
+import { Perf } from 'src/interfaces/validators';
 
 @Injectable()
 export class InfluxService implements OnModuleInit {
@@ -35,7 +35,9 @@ export class InfluxService implements OnModuleInit {
             perf365d: FieldType.INTEGER,
             balance: FieldType.INTEGER,
           },
-          tags: [],
+          tags: [
+            'validator', 
+          ],
         },
       ],
     });
@@ -47,17 +49,23 @@ export class InfluxService implements OnModuleInit {
     this.logger.log('Initialized influx');
   }
 
-  async write(price: number, performanceData: PerformanceData): Promise<void> {
-    const pointsToWrite: IPoint[] = [{
-      fields: {
-        price,
-        perf1d: performanceData?.performance1d,
-        perf7d: performanceData?.performance7d,
-        perf31d: performanceData?.performance31d,
-        perf365d: performanceData?.performance365d,
-        balance: performanceData?.balance,
-      },
-    }];
+  async write(price: number, performances: Array<Perf>): Promise<void> {
+
+    const pointsToWrite = performances.map(perf => {
+      return {
+        tags: {
+          validator: perf.validator.name,
+        },
+        fields: {
+          price,
+          perf1d: perf.performanceData?.performance1d,
+          perf7d: perf.performanceData?.performance7d,
+          perf31d: perf.performanceData?.performance31d,
+          perf365d: perf.performanceData?.performance365d,
+          balance: perf.performanceData?.balance,
+        },
+      };
+    });
 
     await this.client.writeMeasurement(this.INFLUX_MEASUREMENT, pointsToWrite);
   }

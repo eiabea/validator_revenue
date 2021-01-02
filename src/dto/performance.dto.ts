@@ -1,3 +1,4 @@
+import { Validator } from '../interfaces/validators';
 export class PerformanceData {
   balance: number;
   performance1d: number;

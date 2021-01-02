@@ -6,7 +6,10 @@ services:
     command: npm run start:dev
     volumes:
       - .:/src
+      - ./validators.json:/config/validators.json
     env_file: .env
 
   influx:
     image: influxdb:alpine
+    volumes:
+      - ./influx_data:/var/lib/influxdb

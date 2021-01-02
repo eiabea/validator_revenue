@@ -1,16 +1,27 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import axios, { AxiosError, AxiosResponse } from 'axios';
-import { Performance, PerformanceData } from 'src/dto/performance.dto';
+import axios from 'axios';
+import { Performance } from 'src/dto/performance.dto';
+import * as fs from 'fs';
+import { Perf, Validator } from 'src/interfaces/validators';
 
 @Injectable()
 export class FetchService {
   private readonly logger = new Logger(FetchService.name);
-  private VALIDATOR: string = this.configService.get<string>('VALIDATOR');
+  private VALIDATOR_FILE_PATH: string = "/config/validators.json";
+  private validatorsArray: Array<Validator> = [];
 
   constructor(
     private readonly configService: ConfigService,
-  ) { }
+  ) { 
+    try{
+      this.logger.debug(`Loading and parsing validators config from ${this.VALIDATOR_FILE_PATH}`)
+      this.validatorsArray = JSON.parse(fs.readFileSync(this.VALIDATOR_FILE_PATH).toString());
+    }catch(error){
+      this.logger.error("Unable to read validators file", error);
+      throw Error("No validator provided");
+    }
+  }
 
   async getLatestPrice(): Promise<number | undefined> {
     try {
@@ -27,18 +38,15 @@ export class FetchService {
     }
   }
 
-  async getPerformance(): Promise<PerformanceData> {
-
-    if (!this.VALIDATOR) {
-      throw Error("No validator provided");
-    }
-
+  async getPerformance(): Promise<Array<Perf>> {
     try {
-      const performance: AxiosResponse<Performance> = await axios.get<Performance>(`https://beaconcha.in/api/v1/validator/${this.VALIDATOR}/performance`)
-
-      this.logger.debug(`Got latest performance data`);
-
-      return performance.data.data;
+      this.logger.debug(`Loading performance data for ${this.validatorsArray.length} validators`)
+      return await Promise.all(this.validatorsArray.map(async validator => {
+        return {
+          validator,
+          performanceData: (await axios.get<Performance>(`https://beaconcha.in/api/v1/validator/${validator.publicKey}/performance`)).data.data
+        } as Perf
+      }))
     } catch (error) {
       this.logger.error(`Unable to get latest performance data [${error.response.status}]`);
     }
