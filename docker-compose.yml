@@ -3,11 +3,13 @@ version: "3"
 services:
   validator-revenue:
     image: eiabea/validator_revenue
+    restart: unless-stopped
     env_file: .env
     volumes:
       - ./validators.json:/config/validators.json
 
   influx:
     image: influxdb:alpine
+    restart: unless-stopped
     volumes:
       - ./influx_data:/var/lib/influxdb
