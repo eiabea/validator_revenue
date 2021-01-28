@@ -48,7 +48,13 @@ export class FetchService {
         } as Perf
       }))
     } catch (error) {
-      this.logger.error(`Unable to get latest performance data [${error.response.status}]`);
+      const { response } = error;
+      if(response){
+        this.logger.error(`Unable to get latest performance data [${response.status}]`);
+      }else{
+        this.logger.debug(error);
+        this.logger.error(`Unable to get latest performance data [Network Error]`);
+      }
     }
 
   }
