@@ -1,5 +1,8 @@
 version: "3"
 
+volumes:
+  influx:
+
 services:
   validator-revenue:
     build: .
@@ -12,4 +15,4 @@ services:
   influx:
     image: influxdb:alpine
     volumes:
-      - ./influx_data:/var/lib/influxdb
+      - influx:/var/lib/influxdb
