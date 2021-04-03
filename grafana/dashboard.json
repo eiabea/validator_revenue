@@ -17,7 +17,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 1,
-  "iteration": 1617491654935,
+  "iteration": 1617491654943,
   "links": [],
   "panels": [
     {
@@ -118,7 +118,13 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [
+            {
+              "key": "validator",
+              "operator": "=~",
+              "value": "/^$validator$/"
+            }
+          ]
         },
         {
           "alias": "$tag_staker",
@@ -161,7 +167,13 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [
+            {
+              "key": "validator",
+              "operator": "=~",
+              "value": "/^$validator$/"
+            }
+          ]
         }
       ],
       "thresholds": [],
