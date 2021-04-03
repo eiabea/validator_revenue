@@ -11,6 +11,7 @@ export class InfluxService implements OnModuleInit {
   private INFLUX_PORT: string = this.configService.get<string>('INFLUX_PORT', '8086');
   private INFLUX_DB: string = this.configService.get<string>('INFLUX_DB', 'etherstaker');
   private INFLUX_MEASUREMENT: string = this.configService.get<string>('INFLUX_MEASUREMENT', 'performance');
+  private INFLUX_STAKERS_MEASUREMENT: string = this.configService.get<string>('INFLUX_STAKERS_MEASUREMENT', 'stakers');
 
   private client: InfluxDB;
 
@@ -39,6 +40,17 @@ export class InfluxService implements OnModuleInit {
             'validator', 
           ],
         },
+        {
+          measurement: this.INFLUX_STAKERS_MEASUREMENT,
+          fields: {
+            eth: FieldType.FLOAT,
+            dollar: FieldType.FLOAT,
+          },
+          tags: [
+            'staker',
+            'validator'
+          ],
+        },
       ],
     });
     const databases = await this.client.getDatabaseNames();
@@ -50,6 +62,13 @@ export class InfluxService implements OnModuleInit {
   }
 
   async write(price: number, performances: Array<Perf>): Promise<void> {
+    await Promise.all([
+      this.writePerformance(price, performances),
+      this.writeStakers(price, performances)
+    ]);
+  }
+
+  async writePerformance(price: number, performances: Array<Perf>): Promise<void> {
 
     const pointsToWrite = performances.map(perf => {
       return {
@@ -68,5 +87,32 @@ export class InfluxService implements OnModuleInit {
     });
 
     await this.client.writeMeasurement(this.INFLUX_MEASUREMENT, pointsToWrite);
+  }
+
+  async writeStakers(price: number, performances: Array<Perf>): Promise<void> {
+
+    // The beaconcha.in API returns the values in Gwei
+    const ETH_PER_VALIDATOR = 32 * 1e9;
+
+    const pointsToWrite = performances.map(perf => {
+      return perf.validator.stakers.map(staker => {
+
+        const ethShare = ((perf.performanceData.balance - ETH_PER_VALIDATOR) / ETH_PER_VALIDATOR) * staker.share;
+
+        return {
+          tags: {
+            staker: staker.name,
+            validator: perf.validator.name,
+          },
+          fields: {
+            eth: ethShare,
+            dollar: ethShare * price,
+          },
+        };
+      })
+    // map in map produces a [[],[],...] structure, so we have to flatten it here
+    }).reduce((acc, val) => acc.concat(val), []);
+
+    await this.client.writeMeasurement(this.INFLUX_STAKERS_MEASUREMENT, pointsToWrite);
   }
 }
