@@ -2,5 +2,15 @@
   {
     "name": "<CUSTOM NAME>",
     "publicKey": "<PUBLIC KEY OF VALIDATOR>"
+    "stakers": [
+      {
+        "name": "john",
+        "share": 16 
+      },
+      {
+        "name": "jane",
+        "share": 16
+      }
+    ]
   }
 ]
