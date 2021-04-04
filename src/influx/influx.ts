@@ -43,8 +43,9 @@ export class InfluxService implements OnModuleInit {
         {
           measurement: this.INFLUX_STAKERS_MEASUREMENT,
           fields: {
-            eth: FieldType.FLOAT,
-            dollar: FieldType.FLOAT,
+            price: FieldType.FLOAT,
+            revenue: FieldType.FLOAT,
+            revenue_with_deposit: FieldType.FLOAT,
           },
           tags: [
             'staker',
@@ -97,7 +98,7 @@ export class InfluxService implements OnModuleInit {
     const pointsToWrite = performances.map(perf => {
       return perf.validator.stakers.map(staker => {
 
-        const ethShare = ((perf.performanceData.balance - ETH_PER_VALIDATOR) / ETH_PER_VALIDATOR) * staker.share;
+        const revenue = ((perf.performanceData.balance - ETH_PER_VALIDATOR) / ETH_PER_VALIDATOR) * staker.share;
 
         return {
           tags: {
@@ -105,8 +106,9 @@ export class InfluxService implements OnModuleInit {
             validator: perf.validator.name,
           },
           fields: {
-            eth: ethShare,
-            dollar: ethShare * price,
+            price,
+            revenue,
+            revenue_with_deposit: revenue + staker.share,
           },
         };
       })
