@@ -93,7 +93,17 @@ export class InfluxService implements OnModuleInit {
   async writeStakers(price: number, performances: Array<Perf>): Promise<void> {
 
     const pointsToWrite = performances.map(perf => {
-      
+
+      // Backwards compatibility, if no stakers are available use a default name with 32 shares
+      if(!perf.validator.stakers || perf.validator.stakers.length == 0){
+        perf.validator.stakers  = [
+          {
+            name: "staker",
+            share: 32
+          }
+        ]
+      }
+
       const ethPerValidator = perf.validator.stakers.reduce((prev, curr) => {
         return prev + curr.share;
       // The beaconcha.in API returns the values in Gwei
