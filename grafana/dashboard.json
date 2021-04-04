@@ -17,7 +17,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 1,
-  "iteration": 1617491654943,
+  "iteration": 1617563251404,
   "links": [],
   "panels": [
     {
@@ -75,7 +75,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "alias": "eth ($tag_staker)",
+          "alias": "$tag_staker",
           "groupBy": [
             {
               "params": [
@@ -96,12 +96,12 @@
               "type": "fill"
             }
           ],
-          "hide": true,
+          "hide": false,
           "measurement": "stakers",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT sum(\"eth\") FROM \"stakers\" WHERE $timeFilter GROUP BY time($__interval), \"staker\" fill(previous)",
-          "rawQuery": false,
+          "query": "SELECT sum(\"revenue\") * last(\"price\") FROM \"stakers\" WHERE (\"validator\" =~ /^$validator$/) AND $timeFilter GROUP BY time($__interval), \"staker\" fill(previous)",
+          "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
           "select": [
@@ -127,7 +127,7 @@
           ]
         },
         {
-          "alias": "$tag_staker",
+          "alias": "sum $tag_staker",
           "groupBy": [
             {
               "params": [
@@ -148,9 +148,12 @@
               "type": "fill"
             }
           ],
+          "hide": true,
           "measurement": "stakers",
           "orderByTime": "ASC",
           "policy": "default",
+          "query": "SELECT sum(\"revenue_with_deposit\") * last(\"price\") FROM \"stakers\" WHERE (\"validator\" =~ /^$validator$/) AND $timeFilter GROUP BY time($__interval), \"staker\" fill(previous)",
+          "rawQuery": true,
           "refId": "B",
           "resultFormat": "time_series",
           "select": [
@@ -1484,5 +1487,5 @@
   "timezone": "",
   "title": "Validator Revenue",
   "uid": "oYmn03AGz",
-  "version": 1
+  "version": 3
 }
