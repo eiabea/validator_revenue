@@ -15,11 +15,12 @@ API provided by [beaconcha.in](https://beaconcha.in/)
 - [Docker](https://www.docker.com/)
 - [docker-compose](https://docs.docker.com/compose/)
 
-Rename `.env.example` to `.env` and adopt values
-
-```
-$ docker-compose up
-```
+1. Rename `.env.example` to `.env` and adopt the values
+2. Rename `validator.json.example` to `validator.json` and adopt the values. All the shares of the stakers should add up to 32 ;)
+3. Start the application
+    ```
+    $ docker-compose up
+    ```
 
 # Grafana
 

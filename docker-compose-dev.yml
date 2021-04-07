@@ -2,6 +2,7 @@ version: "3"
 
 volumes:
   influx:
+  grafana:
 
 services:
   validator-revenue:
@@ -16,3 +17,10 @@ services:
     image: influxdb:alpine
     volumes:
       - influx:/var/lib/influxdb
+
+  grafana:
+    image: grafana/grafana:7.3.6
+    volumes:
+      - grafana:/var/lib/grafana
+    ports:
+      - 127.0.0.1:3001:3000
