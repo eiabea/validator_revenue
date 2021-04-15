@@ -27,11 +27,11 @@ export class FetchService {
     try {
       const latestState = await axios.get('https://beaconcha.in/latestState')
 
-      const { ethPrice } = latestState.data
+      const { usdRoundPrice } = latestState.data
 
-      this.logger.debug(`Got latest price: ${ethPrice}`);
+      this.logger.debug(`Got latest price: ${usdRoundPrice}`);
 
-      return ethPrice;
+      return usdRoundPrice;
 
     } catch (error) {
       this.logger.error(`Unable to get latest price [${error.response.status}]`);
