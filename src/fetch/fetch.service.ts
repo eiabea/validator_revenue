@@ -1,5 +1,4 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import axios from 'axios';
 import { Performance } from 'src/dto/performance.dto';
 import * as fs from 'fs';
@@ -11,9 +10,7 @@ export class FetchService {
   private VALIDATOR_FILE_PATH: string = "/config/validators.json";
   private validatorsArray: Array<Validator> = [];
 
-  constructor(
-    private readonly configService: ConfigService,
-  ) { 
+  constructor() { 
     try{
       this.logger.debug(`Loading and parsing validators config from ${this.VALIDATOR_FILE_PATH}`)
       this.validatorsArray = JSON.parse(fs.readFileSync(this.VALIDATOR_FILE_PATH).toString());
@@ -25,11 +22,12 @@ export class FetchService {
 
   async getLatestPrice(): Promise<number | undefined> {
     try {
+      this.logger.verbose(`Getting latest price from beaconcha.in`);
       const latestState = await axios.get('https://beaconcha.in/latestState')
 
       const { usdRoundPrice } = latestState.data
 
-      this.logger.debug(`Got latest price: ${usdRoundPrice}`);
+      this.logger.verbose(`Got latest price: ${usdRoundPrice}`);
 
       return usdRoundPrice;
 
@@ -40,13 +38,15 @@ export class FetchService {
 
   async getPerformance(): Promise<Array<Perf>> {
     try {
-      this.logger.debug(`Loading performance data for ${this.validatorsArray.length} validators`)
-      return await Promise.all(this.validatorsArray.map(async validator => {
+      this.logger.verbose(`Getting performance data for ${this.validatorsArray.length} validators`)
+      const perfArray = await Promise.all(this.validatorsArray.map(async validator => {
         return {
           validator,
           performanceData: (await axios.get<Performance>(`https://beaconcha.in/api/v1/validator/${validator.publicKey}/performance`)).data.data
         } as Perf
       }))
+      this.logger.verbose(`Got performance data`)
+      return perfArray;
     } catch (error) {
       const { response } = error;
       if(response){

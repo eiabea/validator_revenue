@@ -26,10 +26,11 @@ export class AppController implements OnModuleInit {
   async onModuleInit() {
     this.logger.log(`Adding new cronjob with the pattern: ${this.CRON_PATTERN}`);
     const fetchJob: CronJob = new CronJob(this.CRON_PATTERN, async () => {
-      this.logger.debug('Triggered fetch job');
+      this.logger.log('Fetch job triggered');
       const price = await this.fetchService.getLatestPrice();
       const performances: Array<Perf> = await this.fetchService.getPerformance();
       this.influxService.write(price, performances);
+      this.logger.log('Successfully finished fetch job');
     });
     this.schedulerRegistry.addCronJob('fetch-job', fetchJob);
     fetchJob.start();

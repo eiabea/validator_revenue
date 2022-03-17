@@ -67,14 +67,16 @@ export class InfluxService implements OnModuleInit {
   }
 
   async write(price: number, performances: Array<Perf>): Promise<void> {
+    this.logger.verbose("Writing data");
     await Promise.all([
       this.writePerformance(price, performances),
       this.writeStakers(price, performances)
     ]);
+    this.logger.verbose("Successfully wrote data");
   }
 
   async writePerformance(price: number, performances: Array<Perf>): Promise<void> {
-
+    this.logger.verbose("Writing performance data");
     const pointsToWrite = performances.map(perf => {
       return {
         tags: {
@@ -92,9 +94,11 @@ export class InfluxService implements OnModuleInit {
     });
 
     await this.client.writeMeasurement(this.INFLUX_MEASUREMENT, pointsToWrite);
+    this.logger.verbose("Successfully wrote performance data")
   }
 
   async writeStakers(price: number, performances: Array<Perf>): Promise<void> {
+    this.logger.verbose("Writing stakers data");
 
     const pointsToWrite = performances.map(perf => {
 
@@ -133,5 +137,6 @@ export class InfluxService implements OnModuleInit {
     }).reduce((acc, val) => acc.concat(val), []);
 
     await this.client.writeMeasurement(this.INFLUX_STAKERS_MEASUREMENT, pointsToWrite);
+    this.logger.verbose("Successfully wrote stakers data");
   }
 }
