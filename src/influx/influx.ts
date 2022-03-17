@@ -1,6 +1,6 @@
 import { Injectable, OnModuleInit, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { InfluxDB, FieldType, IPoint } from 'influx';
+import { InfluxDB, FieldType } from 'influx';
 import { Perf } from 'src/interfaces/validators';
 
 @Injectable()
@@ -9,6 +9,8 @@ export class InfluxService implements OnModuleInit {
 
   private INFLUX_HOST: string = this.configService.get<string>('INFLUX_HOST', 'localhost');
   private INFLUX_PORT: string = this.configService.get<string>('INFLUX_PORT', '8086');
+  private INFLUX_USERNAME: string | undefined = this.configService.get<string>('INFLUX_USERNAME', undefined);
+  private INFLUX_PASSWORD: string | undefined = this.configService.get<string>('INFLUX_PASSWORD', undefined);
   private INFLUX_DB: string = this.configService.get<string>('INFLUX_DB', 'etherstaker');
   private INFLUX_MEASUREMENT: string = this.configService.get<string>('INFLUX_MEASUREMENT', 'performance');
   private INFLUX_STAKERS_MEASUREMENT: string = this.configService.get<string>('INFLUX_STAKERS_MEASUREMENT', 'stakers');
@@ -24,6 +26,8 @@ export class InfluxService implements OnModuleInit {
     this.client = new InfluxDB({
       host: this.INFLUX_HOST,
       port: parseInt(this.INFLUX_PORT, 10),
+      username: this.INFLUX_USERNAME,
+      password: this.INFLUX_PASSWORD,
       database: this.INFLUX_DB,
       schema: [
         {
