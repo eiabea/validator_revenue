@@ -9,7 +9,7 @@ services:
       - ./validators.json:/config/validators.json
 
   influx:
-    image: influxdb:alpine
+    image: influxdb:1.8-alpine
     restart: unless-stopped
     volumes:
       - ./influx_data:/var/lib/influxdb

@@ -14,7 +14,7 @@ services:
     env_file: .env
 
   influx:
-    image: influxdb:alpine
+    image: influxdb:1.8-alpine
     volumes:
       - influx:/var/lib/influxdb
 
