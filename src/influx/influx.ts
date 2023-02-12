@@ -84,11 +84,11 @@ export class InfluxService implements OnModuleInit {
         },
         fields: {
           price,
-          perf1d: perf.performanceData?.performance1d,
-          perf7d: perf.performanceData?.performance7d,
-          perf31d: perf.performanceData?.performance31d,
-          perf365d: perf.performanceData?.performance365d,
-          balance: perf.performanceData?.balance,
+          perf1d: perf.performanceData[0]?.performance1d,
+          perf7d: perf.performanceData[0]?.performance7d,
+          perf31d: perf.performanceData[0]?.performance31d,
+          perf365d: perf.performanceData[0]?.performance365d,
+          balance: perf.performanceData[0]?.balance,
         },
       };
     });
@@ -119,7 +119,7 @@ export class InfluxService implements OnModuleInit {
 
       return perf.validator.stakers.map(staker => {
 
-        const revenue = ((perf.performanceData.balance - ethPerValidator) / ethPerValidator) * staker.share;
+        const revenue = ((perf.performanceData[0].balance - ethPerValidator) / ethPerValidator) * staker.share;
 
         return {
           tags: {

@@ -13,5 +13,5 @@ export interface Validator {
 
 export interface Perf {
   validator: Validator;
-  performanceData: PerformanceData
+  performanceData: [PerformanceData]
 }

@@ -10,5 +10,5 @@ export class PerformanceData {
 
 export class Performance {
   status: string;
-  data: PerformanceData;
+  data: [PerformanceData];
 }
