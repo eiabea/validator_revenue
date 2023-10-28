@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Performance } from 'src/dto/performance.dto';
 import * as fs from 'fs';
 import { Perf, Validator } from 'src/interfaces/validators';
+import { LatestStateData } from '../dto/lateststate.dto';
 
 @Injectable()
 export class FetchService {
@@ -23,9 +24,9 @@ export class FetchService {
   async getLatestPrice(): Promise<number | undefined> {
     try {
       this.logger.verbose(`Getting latest price from beaconcha.in`);
-      const latestState = await axios.get('https://beaconcha.in/latestState')
+      const latestState = await axios.get<LatestStateData>('https://beaconcha.in/latestState')
 
-      const { usdRoundPrice } = latestState.data
+      const usdRoundPrice = latestState.data.rates.mainCurrencyTickerPrices.USD.roundPrice
 
       this.logger.verbose(`Got latest price: ${usdRoundPrice}`);
 
