@@ -24,7 +24,7 @@ export class FetchService {
   async getLatestPrice(): Promise<number | undefined> {
     try {
       this.logger.verbose(`Getting latest price from beaconcha.in`);
-      const latestState = await axios.get<LatestStateData>('https://beaconcha.in/latestState')
+      const latestState = await axios.get<LatestStateData>('https://beaconcha.in/api/v1/latestState')
 
       const usdRoundPrice = latestState.data.rates.mainCurrencyTickerPrices.USD.roundPrice
 
